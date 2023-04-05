@@ -84,6 +84,8 @@ public function adminLogin(Request $request){
 
 }
 
+
+
 public function getForms(){
     $results= DB::table('users')
     ->get(array(
