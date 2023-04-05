@@ -76,6 +76,7 @@ public function adminLogin(Request $request){
 
 
     }
+
     return $this->sendResponse([
         'success' => true,
         'message' => "Logged in successfully"
@@ -120,9 +121,12 @@ public function sendApproveDecision(Request $request, $id){
 
     }
     // $status =($request->status);
-    $user = User::where('id',$id)->first();
+
     if($request->status == 'Approved'){
+        $user = User::find($id)->first();
+        DB::beginTransaction();
         $user->update(['status' => $request->status]);
+        DB::commit();
         Mail::to($user->email)->send(new ApproveMail);
 
     }

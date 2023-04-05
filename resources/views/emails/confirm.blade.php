@@ -3,6 +3,8 @@
 
 Thank you for submitting your information.
 
+ 
+
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent

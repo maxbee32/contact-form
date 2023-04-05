@@ -16,6 +16,7 @@ class ContactMail extends Mailable
     /**
      * Create a new message instance.
      */
+    
     public function __construct()
     {
         //
@@ -38,6 +39,7 @@ class ContactMail extends Mailable
     {
         return new Content(
             markdown: 'emails.confirm',
+
         );
     }
 
