@@ -22,7 +22,6 @@ Route::group(['middleware'=>'api',
               'prefix'=>'admin'
 ],function($router){
 
-    Route::post("contact-form", "App\Http\Controllers\UserController@contactForm");
     Route::post("admin-signup", "App\Http\Controllers\AdminController@adminSignUp");
     Route::post("admin-getForms", "App\Http\Controllers\AdminController@getForms");
     Route::post("admin-sendDecision/{id}", "App\Http\Controllers\AdminController@sendDecision");
