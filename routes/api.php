@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware'=>'api',
-              'prefix'=>'auth'
+              'prefix'=>'admin'
 ],function($router){
 
     Route::post("contact-form", "App\Http\Controllers\UserController@contactForm");
@@ -28,4 +28,11 @@ Route::group(['middleware'=>'api',
     Route::post("admin-sendDecision/{id}", "App\Http\Controllers\AdminController@sendDecision");
     Route::post("admin-createEmail", "App\Http\Controllers\AdminController@createEmail");
     Route::post("admin-bulkEmail", "App\Http\Controllers\AdminController@bulkEmail");
+});
+
+
+Route::group(['middleware'=>'api',
+              'prefix'=>'user'
+],function($router){
+    Route::post("contact-form", "App\Http\Controllers\UserController@contactForm");
 });
