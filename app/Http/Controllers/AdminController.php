@@ -25,7 +25,7 @@ class AdminController extends Controller
      }
 
      public function __construct(){
-        $this->middleware('auth:api', ['except'=>['adminSignUp','adminLogin','getForms','sendDecision','bulkEmail']]);
+        $this->middleware('auth:api', ['except'=>['adminSignUp','adminLogin','getForms','sendApproveDecision','bulkEmail']]);
     }
 
 
@@ -91,6 +91,7 @@ public function getForms(){
     ->get(array(
           'id',
           'dob',
+          'name',
           'email',
           'phone',
           'address',
@@ -105,7 +106,7 @@ public function getForms(){
 }
 
 
-public function sendDecision(Request $request, $id){
+public function sendApproveDecision(Request $request, $id){
     $validator = Validator::make($request->all(), [
         'status' => ['required','string'],
     ]);
@@ -118,31 +119,18 @@ public function sendDecision(Request $request, $id){
         ], 400);
 
     }
-    $status =($request->status);
-    $user = User::find($id);
-    if($status =="Approved"){
+    // $status =($request->status);
+    $user = User::where('id',$id)->first();
+    if($request->status == 'Approved'){
         $user->update(['status' => $request->status]);
         Mail::to($user->email)->send(new ApproveMail);
 
-
+    }
         return $this ->sendResponse([
             'success' => true,
               'message' => 'Admin approved contact form',
 
            ],200);
-    }else{
-
-        if($status =="Reject"){
-            $user->update(['status' =>$request->status]);
-            Mail::to($user->email)->send(new RejectMail);
-
-            return $this ->sendResponse([
-                'success' => true,
-                  'message' => 'Admin rejected contact form',
-
-               ],200);
-    }
-}
 
 }
 
