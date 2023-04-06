@@ -54,10 +54,10 @@ class UserController extends Controller
             $validator-> validated()
         ));
 
-        $user = User::select('*')->first();
+        // $user = User::select('*')->where();
         $admin =Admin::select('email')->get();
         Mail::to($request->email)->send(new ContactMail);
-        Mail::to($admin)->send(new ReceiveMail($user));
+        Mail::to($admin)->send(new ReceiveMail());
 
         return $this->sendResponse([
             'success' => true,

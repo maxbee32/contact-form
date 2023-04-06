@@ -131,7 +131,7 @@ public function sendApproveDecision(Request $request, $id){
 
          return $this ->sendResponse([
             'success' => true,
-              'message' => 'Admin approved contact form',
+              'message' => 'Admin activated contact form',
 
            ],200);
 

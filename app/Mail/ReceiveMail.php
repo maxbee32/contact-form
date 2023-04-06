@@ -16,12 +16,12 @@ class ReceiveMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public $details;
+    // public $details;
 
-    public function __construct($details)
+    public function __construct()
     {
         //
-      $this->details =$details;
+    //   $this->details =$details;
     }
 
     /**

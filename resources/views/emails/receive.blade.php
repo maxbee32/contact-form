@@ -1,16 +1,19 @@
 @component('mail::message')
 # Email Verification
 
-New user has submitted a contact form with the email {{$details->email}}  and {{ $details->name}}.
+New user has submitted a contact form.
 
-{{-- @component('mail::button', ['url' =>route('admin.sendApproveDecision',$user->id),'color'=>'blue'])
-  Approve
+Login into your account to
+
+@component('mail::button', ['url' => '','color'=>'blue'])
+  Activate
 @endcomponent
 
+               OR
 
-@component('mail::button', ['url' => '$url1','color'=>'red'])
+@component('mail::button', ['url' => '','color'=>'red'])
   Reject
-@endcomponent --}}
+@endcomponent
 
 
 Thanks,<br>
