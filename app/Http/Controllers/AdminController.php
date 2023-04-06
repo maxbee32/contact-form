@@ -189,7 +189,7 @@ public function bulkEmail(Request $request){
 
      $msgg = Message::select('*')->first();
 
-       $user =User::where('status','=','Approved')->get('email');
+       $user =User::where('status','=','Activated')->get('email');
 
 
 
