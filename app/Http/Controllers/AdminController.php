@@ -8,6 +8,7 @@ use App\Mail\BulkMail;
 use App\Mail\RejectMail;
 use App\Mail\ApproveMail;
 use App\Models\Message;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -25,7 +26,7 @@ class AdminController extends Controller
      }
 
      public function __construct(){
-        $this->middleware('auth:api', ['except'=>['adminSignUp','adminLogin','getForms','sendApproveDecision','bulkEmail']]);
+        $this->middleware('auth:api', ['except'=>['adminSignUp','adminLogin','getForms','sendApproveDecision','sendRejectDecision','bulkEmail']]);
     }
 
 
@@ -96,7 +97,8 @@ public function getForms(){
           'email',
           'phone',
           'address',
-          'remarks'
+          'remarks',
+          'status'
     ));
 
     return $this ->sendResponse([
@@ -109,34 +111,61 @@ public function getForms(){
 
 public function sendApproveDecision(Request $request, $id){
     $validator = Validator::make($request->all(), [
-        'status' => ['required','string'],
-    ]);
+                'status' => ['required','string'],
+                    ]);
 
-    if($validator-> fails()){
-        return $this->sendResponse([
-            'success' => false,
-            'data'=> $validator->errors(),
-            'message' => 'Validation Error'
-        ], 400);
+                    if($validator-> fails()){
+                        return $this->sendResponse([
+                            'success' => false,
+                            'data'=> $validator->errors(),
+                            'message' => 'Validation Error'
+                        ], 400);
 
-    }
-    // $status =($request->status);
+            }
 
-    if($request->status == 'Approved'){
-        $user = User::find($id)->first();
-        DB::beginTransaction();
-        $user->update(['status' => $request->status]);
-        DB::commit();
+        $user = DB::table('users')
+        ->where('id', $id)
+        ->update(['status' => $request->status]);
+         $user = User::find($id);
         Mail::to($user->email)->send(new ApproveMail);
 
-    }
-        return $this ->sendResponse([
+         return $this ->sendResponse([
             'success' => true,
               'message' => 'Admin approved contact form',
 
            ],200);
 
-}
+        }
+
+
+   public function sendRejectDecision(Request $request, $id){
+            $validator = Validator::make($request->all(), [
+                'status' => ['required','string'],
+            ]);
+
+            if($validator-> fails()){
+                return $this->sendResponse([
+                    'success' => false,
+                    'data'=> $validator->errors(),
+                    'message' => 'Validation Error'
+                ], 400);
+
+            }
+
+
+                $user = DB::table('users')
+                ->where('id', $id)
+                ->update(['status' => $request->status]);
+                 $user = User::find($id);
+                Mail::to($user->email)->send(new RejectMail);
+
+                 return $this ->sendResponse([
+                    'success' => true,
+                      'message' => 'Admin rejected contact form',
+
+                   ],200);
+
+                }
 
 
 
@@ -157,6 +186,7 @@ public function bulkEmail(Request $request){
      Message::create(array_merge(
         $validator-> validated(),
     ));
+
      $msgg = Message::select('*')->first();
 
        $user =User::where('status','=','Approved')->get('email');
@@ -171,6 +201,7 @@ public function bulkEmail(Request $request){
 
 
        }
+
        DB::table('messages')->delete();
 
 return $this->sendResponse([

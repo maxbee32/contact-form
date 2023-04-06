@@ -25,7 +25,8 @@ Route::group(['middleware'=>'api',
     Route::post("admin-signup", "App\Http\Controllers\AdminController@adminSignUp");
     Route::post("admin-login","App\Http\Controllers\AdminController@adminLogin");
     Route::post("admin-getForms", "App\Http\Controllers\AdminController@getForms");
-    Route::post("admin-sendApproveDecision/{id}", "App\Http\Controllers\AdminController@sendApproveDecision");
+    Route::post("admin-sendApproveDecision/{id}", "App\Http\Controllers\AdminController@sendApproveDecision")->name('admin.sendApproveDecision');
+    Route::post("admin-sendRejectDecision/{id}", "App\Http\Controllers\AdminController@sendRejectDecision")->name('admin.sendRejectDecision');
     Route::post("admin-createEmail", "App\Http\Controllers\AdminController@createEmail");
     Route::post("admin-bulkEmail", "App\Http\Controllers\AdminController@bulkEmail");
 });
